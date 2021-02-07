@@ -14,6 +14,53 @@ void display(Array arr)
     cout<<"Elements in array are :";
     for(int i=0; i<arr.length; i++)
         cout<<arr.A[i]<<" ";
+
+    cout <<"\n Length of the array is :"<< arr.length << endl;    
+};
+
+void append(Array *arr, int element)
+{
+    if(arr->length < arr->size)
+    {
+        arr->A[arr->length] = element;
+        arr->length += 1;
+    }
+    
+};
+
+void add(Array *arr, int index, int element)
+{
+    if(index >=0 && index <= arr->length)
+    {
+        for(int i=arr->length; i>index; i--)
+            arr->A[i] = arr->A[i-1];
+        
+        arr->A[index] = element;
+        arr->length += 1;
+    }
+};
+
+int del(Array *arr, int index)
+{
+    int x= arr->A[index];
+
+    if(index >=0 && index < arr->length)
+    {
+        for(int i=index; i< arr->length-1; i++)
+            arr->A[i] = arr->A[i+1];
+
+        arr->length--;    
+    }
+    return x;
+};
+
+int LinearSearch (Array arr, int key)
+{
+    for(int i=0; i< arr.length; i++)
+        if (arr.A[i] == key)
+            return i;
+
+    return -1;        
 };
 
 int main()
@@ -40,6 +87,19 @@ int main()
     arr.length = n;
     
     display(arr);
+
+    append(&arr, 7);
+    display(arr);
+
+    //Index value input should start from zero i.e for example you want to add at 6th pos in array index should be 5
+    add(&arr, 5, 6);
+    display(arr);
+
+    //Index value input should start from zero i.e for example you want to delete at 6th pos in array index should be 5
+    cout << "deleted element is : " << del(&arr, 6) << endl;
+    display(arr);
+
+    cout << "The index of the search key is : " << LinearSearch(arr, 5) <<endl;
 
     delete[] arr.A;
 
