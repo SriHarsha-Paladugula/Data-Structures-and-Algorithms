@@ -63,6 +63,23 @@ int LinearSearch (Array arr, int key)
     return -1;        
 };
 
+int BinarySearch (Array arr, int key)
+{
+    int low=0, high=arr.length, mid; 
+    while ( low < high)
+    {
+        mid = (high + low)/2;
+
+        if(arr.A[mid] == key)
+            return mid;
+        else if (key > arr.A[mid])
+            low = mid+1;
+        else
+            high = mid-1;               
+    }
+    return -1;
+};
+
 int main()
 {
     struct Array arr;
@@ -96,10 +113,13 @@ int main()
     display(arr);
 
     //Index value input should start from zero i.e for example you want to delete at 6th pos in array index should be 5
-    cout << "deleted element is : " << del(&arr, 6) << endl;
+    cout << "deleted element is : " << del(&arr, 3) << endl;
     display(arr);
 
-    cout << "The index of the search key is : " << LinearSearch(arr, 5) <<endl;
+    cout << "The index of the search key in linear search is : " << LinearSearch(arr, 5) <<endl;
+    
+    //Note that for binary search to work array must be in sorted order
+    cout << "The index of the search key in binary search is : " << BinarySearch (arr,  8) <<endl;
 
     delete[] arr.A;
 
