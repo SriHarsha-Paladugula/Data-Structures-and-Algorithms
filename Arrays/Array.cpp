@@ -1,96 +1,128 @@
 #include<iostream>
 
 using namespace std;
-
-struct Array
+template<class T>
+class Array
 {
-    int *A;
-    int size;
-    int length;
-};
+    private:
+        T *A;
+        int size;
+        int length;
+    public:
+        Array()
+        {
+            size = 10;
+            A = new T[size];
+            length = 0;
+        }
+        Array(int sz)
+        {
+            size = sz;
+            A = new T[size];
+            length = 0;
+        }
+        ~Array()
+        {
+            delete []A;
+        }
+        void setSize(int sz)
+        {
+            if (length==0)
+                size=sz;
+            else
+                cout<<"To set the Size of the Array, array should be empty"<<endl;    
+        }
+        void getSize()
+        {
+            cout<<"To  Size of the Array is : "<< size << endl;    
+        }
+        void getLength()
+        {
+            cout<<"To  length of the Array is : "<< length << endl;    
+        }
+        void display()
+        {
+            cout<<"Elements in array are :";
+            for(int i=0; i<length; i++)
+                cout<<A[i]<<" ";
 
-void display(Array arr)
-{
-    cout<<"Elements in array are :";
-    for(int i=0; i<arr.length; i++)
-        cout<<arr.A[i]<<" ";
+            cout <<"\n Length of the array is :"<< length << endl;    
+        };
 
-    cout <<"\n Length of the array is :"<< arr.length << endl;    
-};
+        void append(T element)
+        {
+            if(length < size)
+            {
+                A[length] = element;
+                length += 1;
+            }
 
-void append(Array *arr, int element)
-{
-    if(arr->length < arr->size)
-    {
-        arr->A[arr->length] = element;
-        arr->length += 1;
-    }
-    
-};
+        };
 
-void add(Array *arr, int index, int element)
-{
-    if(index >=0 && index <= arr->length)
-    {
-        for(int i=arr->length; i>index; i--)
-            arr->A[i] = arr->A[i-1];
-        
-        arr->A[index] = element;
-        arr->length += 1;
-    }
-};
+        void add(int index, T element)
+        {
+            if(index >=0 && index <= length)
+            {
+                for(int i=length; i>index; i--)
+                    A[i] = A[i-1];
 
-int del(Array *arr, int index)
-{
-    int x= arr->A[index];
+                A[index] = element;
+                length += 1;
+            }
+        };
 
-    if(index >=0 && index < arr->length)
-    {
-        for(int i=index; i< arr->length-1; i++)
-            arr->A[i] = arr->A[i+1];
+        int del(int index)
+        {
+            int x= A[index];
 
-        arr->length--;    
-    }
-    return x;
-};
+            if(index >=0 && index < length)
+            {
+                for(int i=index; i< length-1; i++)
+                    A[i] = A[i+1];
 
-int LinearSearch (Array arr, int key)
-{
-    for(int i=0; i< arr.length; i++)
-        if (arr.A[i] == key)
-            return i;
+                length--;    
+            }
+            return x;
+        };
 
-    return -1;        
-};
+        int LinearSearch (T element)
+        {
+            for(int i=0; i< length; i++)
+                if (A[i] == element)
+                    return i;
 
-int BinarySearch (Array arr, int key)
-{
-    int low=0, high=arr.length, mid; 
-    while ( low < high)
-    {
-        mid = (high + low)/2;
+            return -1;        
+        };
 
-        if(arr.A[mid] == key)
-            return mid;
-        else if (key > arr.A[mid])
-            low = mid+1;
-        else
-            high = mid-1;               
-    }
-    return -1;
+        int BinarySearch (int element)
+        {
+            int low=0, high=length, mid; 
+            while ( low <= high)
+            {
+                mid = (high + low)/2;
+
+                if(A[mid] == element)
+                    return mid;
+                else if (element > A[mid])
+                    low = mid+1;
+                else
+                    high = mid-1;               
+            }
+            return -1;
+        };
 };
 
 int main()
 {
-    struct Array arr;
-    int n;
+    Array<float> arr1;
+    int n, sz;
+    float x;
     cout << "Enter size of the array" << endl;
-    cin >> arr.size;
-    
-    arr.A = new int[arr.size];
-    arr.length = 0;
-    
-    cout<< "arr.size is : " << arr.size << endl;
+    cin >> sz;
+
+    arr1.setSize(sz);
+
+    arr1.getSize();
 
     cout<<"Enter no. of numbers you need to add to the array"<< endl;;
     cin >> n;
@@ -98,30 +130,28 @@ int main()
     for(int i=0; i<n; i++)
     {
         cout <<"please enter " << i+1 << " number you wish to add to your array" << endl;
-        cin >> arr.A[i];
+        cin >> x;
+        arr1.append(x);
     }
 
-    arr.length = n;
-    
-    display(arr);
+    arr1.getLength();
+    arr1.display();
 
-    append(&arr, 7);
-    display(arr);
+    arr1.append(7);
+    arr1.display();
 
     //Index value input should start from zero i.e for example you want to add at 6th pos in array index should be 5
-    add(&arr, 5, 6);
-    display(arr);
+    arr1.add(5, 6);
+    arr1.display();
 
     //Index value input should start from zero i.e for example you want to delete at 6th pos in array index should be 5
-    cout << "deleted element is : " << del(&arr, 3) << endl;
-    display(arr);
+    cout << "deleted element is : " << arr1.del(3) << endl;
+    arr1.display();
 
-    cout << "The index of the search key in linear search is : " << LinearSearch(arr, 5) <<endl;
+    cout << "The index of the search key in linear search is : " << arr1.LinearSearch(5.9) <<endl;
     
     //Note that for binary search to work array must be in sorted order
-    cout << "The index of the search key in binary search is : " << BinarySearch (arr,  8) <<endl;
-
-    delete[] arr.A;
+    cout << "The index of the search key in binary search is : " << arr1.BinarySearch(6) <<endl;
 
     return 0;
 };
