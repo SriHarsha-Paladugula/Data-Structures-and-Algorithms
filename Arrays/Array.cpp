@@ -25,92 +25,107 @@ class Array
         {
             delete []A;
         }
-        void setSize(int sz)
-        {
-            if (length==0)
-                size=sz;
-            else
-                cout<<"To set the Size of the Array, array should be empty"<<endl;    
-        }
-        void getSize()
-        {
-            cout<<"To  Size of the Array is : "<< size << endl;    
-        }
-        void getLength()
-        {
-            cout<<"To  length of the Array is : "<< length << endl;    
-        }
-        void display()
-        {
-            cout<<"Elements in array are :";
-            for(int i=0; i<length; i++)
-                cout<<A[i]<<" ";
-
-            cout <<"\n Length of the array is :"<< length << endl;    
-        };
-
-        void append(T element)
-        {
-            if(length < size)
-            {
-                A[length] = element;
-                length += 1;
-            }
-
-        };
-
-        void add(int index, T element)
-        {
-            if(index >=0 && index <= length)
-            {
-                for(int i=length; i>index; i--)
-                    A[i] = A[i-1];
-
-                A[index] = element;
-                length += 1;
-            }
-        };
-
-        int del(int index)
-        {
-            int x= A[index];
-
-            if(index >=0 && index < length)
-            {
-                for(int i=index; i< length-1; i++)
-                    A[i] = A[i+1];
-
-                length--;    
-            }
-            return x;
-        };
-
-        int LinearSearch (T element)
-        {
-            for(int i=0; i< length; i++)
-                if (A[i] == element)
-                    return i;
-
-            return -1;        
-        };
-
-        int BinarySearch (int element)
-        {
-            int low=0, high=length, mid; 
-            while ( low <= high)
-            {
-                mid = (high + low)/2;
-
-                if(A[mid] == element)
-                    return mid;
-                else if (element > A[mid])
-                    low = mid+1;
-                else
-                    high = mid-1;               
-            }
-            return -1;
-        };
+        void setSize(int sz);
+        void getSize();
+        void getLength();
+        void display();
+        void append(T element);
+        void add(int index, T element);
+        T del(int index);
+        int LinearSearch (T element);
+        int BinarySearch (T element);
 };
+
+template<class T>
+void Array<T>::setSize(int sz)
+{
+    if (length==0)
+        size=sz;
+    else
+        cout<<"To set the Size of the Array, array should be empty"<<endl;    
+}
+
+template<class T>
+void Array<T>::getSize()
+{
+    cout<<"To  Size of the Array is : "<< size << endl;    
+}
+
+template<class T>
+void Array<T>::getLength()
+{
+    cout<<"To  length of the Array is : "<< length << endl;    
+}
+
+template<class T>
+void Array<T>::display()
+{
+    cout<<"Elements in array are :";
+    for(int i=0; i<length; i++)
+        cout<<A[i]<<" ";
+    cout <<"\n Length of the array is :"<< length << endl;    
+}
+
+template<class T>
+void Array<T>::append(T element)
+{
+    if(length < size)
+    {
+        A[length] = element;
+        length += 1;
+    }
+}
+
+template<class T>
+void Array<T>:: add(int index, T element)
+{
+    if(index >=0 && index <= length)
+    {
+        for(int i=length; i>index; i--)
+            A[i] = A[i-1];
+        A[index] = element;
+        length += 1;
+    }
+}
+
+template<class T>
+T Array<T>::del(int index)
+{
+    int x= A[index];
+    if(index >=0 && index < length)
+    {
+        for(int i=index; i< length-1; i++)
+            A[i] = A[i+1];
+        length--;    
+    }
+    return x;
+}
+
+template<class T>
+int Array<T>::LinearSearch (T element)
+{
+    for(int i=0; i< length; i++)
+        if (A[i] == element)
+            return i;
+    return -1;        
+}
+
+template<class T>
+int Array<T>::BinarySearch (T element)
+{
+    int low=0, high=length, mid; 
+    while ( low <= high)
+    {
+        mid = (high + low)/2;
+        if(A[mid] == element)
+            return mid;
+        else if (element > A[mid])
+            low = mid+1;
+        else
+            high = mid-1;               
+    }
+    return -1;
+}
 
 int main()
 {
