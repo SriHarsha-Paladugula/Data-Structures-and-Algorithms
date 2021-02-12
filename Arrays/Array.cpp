@@ -28,12 +28,14 @@ class Array
         void setSize(int sz);
         void getSize();
         void getLength();
-        void display();
-        void append(T element);
-        void add(int index, T element);
-        T del(int index);
+        void Display();
+        void Append(T element);
+        void Insert(int index, T element);
+        T Delete(int index);
         int LinearSearch (T element);
         int BinarySearch (T element);
+        T Get(int index);
+        void Set(int index, T element);
 };
 
 template<class T>
@@ -58,7 +60,7 @@ void Array<T>::getLength()
 }
 
 template<class T>
-void Array<T>::display()
+void Array<T>::Display()
 {
     cout<<"Elements in array are :";
     for(int i=0; i<length; i++)
@@ -67,7 +69,7 @@ void Array<T>::display()
 }
 
 template<class T>
-void Array<T>::append(T element)
+void Array<T>::Append(T element)
 {
     if(length < size)
     {
@@ -77,7 +79,7 @@ void Array<T>::append(T element)
 }
 
 template<class T>
-void Array<T>:: add(int index, T element)
+void Array<T>:: Insert(int index, T element)
 {
     if(index >=0 && index <= length)
     {
@@ -89,7 +91,7 @@ void Array<T>:: add(int index, T element)
 }
 
 template<class T>
-T Array<T>::del(int index)
+T Array<T>::Delete(int index)
 {
     int x= A[index];
     if(index >=0 && index < length)
@@ -127,6 +129,22 @@ int Array<T>::BinarySearch (T element)
     return -1;
 }
 
+template<class T>
+T Array<T>::Get(int index)
+{
+    if (index>=0 && index < length)
+        return A[index];
+    cout<<"Invalid Index"<<endl;    
+}
+
+template<class T>
+void Array<T>::Set(int index, T element)
+{
+    if (index>=0 && index < length)
+        return A[index] = element;
+    cout<<"Invalid Index"<<endl;    
+}
+
 int main()
 {
     Array<float> arr1;
@@ -146,22 +164,22 @@ int main()
     {
         cout <<"please enter " << i+1 << " number you wish to add to your array" << endl;
         cin >> x;
-        arr1.append(x);
+        arr1.Append(x);
     }
 
     arr1.getLength();
-    arr1.display();
+    arr1.Display();
 
-    arr1.append(7);
-    arr1.display();
+    arr1.Append(7);
+    arr1.Display();
 
     //Index value input should start from zero i.e for example you want to add at 6th pos in array index should be 5
-    arr1.add(5, 6);
-    arr1.display();
+    arr1.Insert(5, 6);
+    arr1.Display();
 
     //Index value input should start from zero i.e for example you want to delete at 6th pos in array index should be 5
-    cout << "deleted element is : " << arr1.del(3) << endl;
-    arr1.display();
+    cout << "deleted element is : " << arr1.Delete(3) << endl;
+    arr1.Display();
 
     cout << "The index of the search key in linear search is : " << arr1.LinearSearch(5.9) <<endl;
     
