@@ -36,6 +36,12 @@ class Array
         int BinarySearch (T element);
         T Get(int index);
         void Set(int index, T element);
+        T Min();
+        T Max();
+        T Sum();
+        T Avg();
+        void Reverse();
+        void swap(T *x, T *y);
 };
 
 template<class T>
@@ -65,7 +71,7 @@ void Array<T>::Display()
     cout<<"Elements in array are :";
     for(int i=0; i<length; i++)
         cout<<A[i]<<" ";
-    cout <<"\n Length of the array is :"<< length << endl;    
+    cout << endl;    
 }
 
 template<class T>
@@ -145,6 +151,67 @@ void Array<T>::Set(int index, T element)
     cout<<"Invalid Index"<<endl;    
 }
 
+template<class T>
+T Array<T>::Min()
+{
+    T min = A[0];
+    for (int i=1; i<length; i++)
+    {
+        if (A[i] < A[0])
+            min = A[i];
+    }
+    return min;
+}
+
+template<class T>
+T Array<T>::Max()
+{
+    T max = A[0];
+    for (int i=1; i<length; i++)
+    {
+        if (A[i] > A[0])
+            max = A[i];
+    }
+    return max;
+}
+
+template<class T>
+T Array<T>::Sum()
+{
+    T sum = 0;
+    for (int i=0; i<length; i++)
+            sum += A[i];
+    return sum;
+}
+
+template<class T>
+T Array<T>::Avg()
+{
+   return (float)Sum()/length;
+}
+
+template<class T>
+void Array<T>::swap(T *x,T *y)
+{
+ int temp;
+ temp=*x;
+ *x=*y;
+ *y=temp;
+}
+
+template<class T>
+void Array<T>::Reverse()
+{
+    int i=0;
+    int j=length-1;
+   while(i<j)
+   {
+        swap(&A[i], &A[j]);
+        i++;
+        j--;
+   }
+}
+
 int main()
 {
     Array<float> arr1;
@@ -185,6 +252,16 @@ int main()
     
     //Note that for binary search to work array must be in sorted order
     cout << "The index of the search key in binary search is : " << arr1.BinarySearch(6) <<endl;
+
+    cout << "The Minimum value of Array is : " << arr1.Min() <<endl;
+    cout << "The Maximum value of Array is : " << arr1.Max() <<endl;
+    cout << "The Sum of all elements  of Array is : " << arr1.Sum() <<endl;
+    cout << "The Average of all elements  of Array is : " << arr1.Avg() <<endl;
+
+    //reverse the elemens in the array
+    arr1.Reverse();
+    cout << "Array after reversing of its elements are: \n" ;
+    arr1.Display();
 
     return 0;
 };
