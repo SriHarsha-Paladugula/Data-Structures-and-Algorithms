@@ -42,6 +42,8 @@ class Array
         T Avg();
         void Reverse();
         void swap(T *x, T *y);
+        int isSorted();
+        void InserSort(T x);
 };
 
 template<class T>
@@ -210,6 +212,15 @@ void Array<T>::Reverse()
         i++;
         j--;
    }
+}
+
+template<class T>
+int Array<T>::isSorted()
+{
+    for(int i=0; i<length-1; i++)
+        if (A[i] > A[i+1])
+            return 0;
+    return 1;        
 }
 
 int main()
