@@ -43,7 +43,7 @@ class Array
         void Reverse();
         void swap(T *x, T *y);
         int isSorted();
-        void InserSort(T x);
+        void InserSort(T element);
 };
 
 template<class T>
@@ -221,6 +221,22 @@ int Array<T>::isSorted()
         if (A[i] > A[i+1])
             return 0;
     return 1;        
+}
+
+template<class T>
+void Array<T>::InserSort(T element)
+{
+    int i = length-1
+    if( length == size)
+        cout<<"Array is full cannot insert this element in the array" << endl;
+        return;
+    while(i >= 0 && A[i] >= element)
+    {
+        A[i+1] = A[i];
+        i--;
+    }
+    A[i+1] = element;
+    length++;
 }
 
 int main()
