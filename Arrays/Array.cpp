@@ -44,6 +44,7 @@ class Array
         void swap(T *x, T *y);
         int isSorted();
         void InserSort(T element);
+        void Rearrange();
 };
 
 template<class T>
@@ -237,6 +238,24 @@ void Array<T>::InserSort(T element)
     }
     A[i+1] = element;
     length++;
+}
+
+template<class T>
+void Array<T>::Rearrange()
+{
+ int i,j;
+ i=0;
+ j= length-1;
+
+ while(i<j)
+ {
+    while( A[i]<0)
+        i++;
+    while( A[j]>=0)
+        j--;
+    i f(i<j)
+        swap(& A[i],& A[j]);
+ }
 }
 
 int main()
