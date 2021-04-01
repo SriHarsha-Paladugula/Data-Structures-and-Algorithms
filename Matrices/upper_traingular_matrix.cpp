@@ -3,13 +3,13 @@
 using namespace std;
 
 template<typename T>
-class LowerTriangularMatrix
+class UpperTriangularMatrix
 {
     private:
         int n;
         T* data_array;
     public:
-        LowerTriangularMatrix(int n)
+        UpperTriangularMatrix(int n)
         {
             this->n = n;
             data_array = new T[n*(n+1)/2];
@@ -20,7 +20,7 @@ class LowerTriangularMatrix
         void set_col_major(int i, int j, T data);
         T get_col_major(int i, int j);
         void display_col_major();
-        ~ LowerTriangularMatrix()
+        ~ UpperTriangularMatrix()
         {
             delete[] data_array;
         }
@@ -28,30 +28,30 @@ class LowerTriangularMatrix
 
 
 template<class T>
-void LowerTriangularMatrix<T>::set_row_major(int i, int j, T data)
+void UpperTriangularMatrix<T>::set_row_major(int i, int j, T data)
 {
-    if(i >= j)
-        data_array[i*(i-1)/2 + (j-1)] = data;
+    if(j >= i)
+        data_array[n*(i-1)-(i-2)*(i-1)/2+ (j-i)] = data;
 }
 
 template<class T>
-T LowerTriangularMatrix<T>::get_row_major(int i, int j)
+T UpperTriangularMatrix<T>::get_row_major(int i, int j)
 {
-    if(i >= j)
-        return  data_array[i*(i-1)/2 + (j-1)];
+    if(j >= i)
+        return data_array[n*(i-1)-(i-2)*(i-1)/2+ (j-i)];
     else
         return 0;    
 }
 
 template<class T>
-void LowerTriangularMatrix<T>::display_row_major()
+void UpperTriangularMatrix<T>::display_row_major()
 {
    for(int i=1; i<=n; i++)
    {
        for(int j=1; j<=n; j++)
        {
-            if(i>=j)
-                cout<< data_array[i*(i-1)/2 + (j-1)]<<" ";
+            if(j>=i)
+                cout<< data_array[n*(i-1)-(i-2)*(i-1)/2+ (j-i)]<<" ";
             else
                 cout<<"0 ";
        }
@@ -60,30 +60,30 @@ void LowerTriangularMatrix<T>::display_row_major()
 }
 
 template<class T>
-void LowerTriangularMatrix<T>::set_col_major(int i, int j, T data)
+void UpperTriangularMatrix<T>::set_col_major(int i, int j, T data)
 {
-    if(i >= j)
-        data_array[n*(j-1)-(j-2)*(j-1)/2+ (i-j)] = data;
+    if(j >= i)
+        data_array[j*(j-1)/2 + (i-1)] = data;
 }
 
 template<class T>
-T LowerTriangularMatrix<T>::get_col_major(int i, int j)
+T UpperTriangularMatrix<T>::get_col_major(int i, int j)
 {
-    if(i >= j)
-        return data_array[n*(j-1)-(j-2)*(j-1)/2+ (i-j)];
+    if(j >= i)
+        return  data_array[j*(j-1)/2 + (i-1)];
     else
         return 0;    
 }
 
 template<class T>
-void LowerTriangularMatrix<T>::display_col_major()
+void UpperTriangularMatrix<T>::display_col_major()
 {
-   for(int i=1; i<=n; i++)
+    for(int i=1; i<=n; i++)
    {
        for(int j=1; j<=n; j++)
        {
-            if(i>=j)
-                cout<< data_array[n*(j-1)-(j-2)*(j-1)/2+ (i-j)]<<" ";
+            if(j>=i)
+                cout<< data_array[j*(j-1)/2 + (i-1)]<<" ";
             else
                 cout<<"0 ";
        }
@@ -95,18 +95,18 @@ void LowerTriangularMatrix<T>::display_col_major()
 int main()
 {
     int size_of_matrix, data;
-    cout <<"Please enter the size of the lower triangular matrix you wish to generate" << endl;
+    cout <<"Please enter the size of the upper triangular matrix you wish to generate" << endl;
     cin >> size_of_matrix;
-    LowerTriangularMatrix<int> d(size_of_matrix);
+    UpperTriangularMatrix<int> d(size_of_matrix);
     for(int i=1; i<=size_of_matrix; i++)
     {
         for(int j=1; j<=size_of_matrix; j++)
         {
             cin>>data;
-            d.set_col_major(i, j, data);
+            d.set_row_major(i, j, data);
         }
     }
     cout << "\n";
-    d.display_col_major();
+    d.display_row_major();
     return 0;
 }
