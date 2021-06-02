@@ -12,7 +12,6 @@ template <class T>
 class linked_list
 {
     private:
-        /* data */
         Node<T> *head, *tail;
         int size;
 
@@ -29,10 +28,14 @@ class linked_list
         void display_head();
         void display_tail();
         void display_all();
-        void getsize();
+        int getsize();
         void insert(int pos, T value);
         void reverse();
         void deleteNode(int Pos);
+        T Max();
+        T Min();
+        T Sum();
+        T at(int pos);
 
         ~linked_list(){};
 
@@ -93,9 +96,10 @@ void linked_list<T>::display_all()
 }
 
 template <class T>
-void linked_list<T>::getsize()
+int linked_list<T>::getsize()
 {
     cout<< "Size of linked_list is : "<< size <<endl;
+    return size;
 }
 
 template <class T>
@@ -103,6 +107,9 @@ void linked_list<T>::insert(int pos, T value)
 {
     Node<T> *temp = head;
     Node<T> *new_node = new Node<T>;
+
+    if(pos > size+1)
+        cout << "Insertion is not possible since size of linked list is only " << size << endl;
 
     if (pos == 1)
     {
@@ -114,14 +121,14 @@ void linked_list<T>::insert(int pos, T value)
 
     else
     {
-        for (int i=2; i<=size; i++)
+        for (int i=2; i<=size+1; i++)
         {
-            if(i == pos-1)
+            if(i == pos)
             {
                 new_node->data = value;
                 new_node->next_node = temp->next_node;
                 temp->next_node = new_node;
-                if (i == size)
+                if (i == size+1)
                     tail = new_node;
                 size += 1;    
             }
@@ -173,6 +180,68 @@ void linked_list<T>::deleteNode(int pos)
     }
     
 }
+
+template <class T>
+T linked_list<T>::Max()
+{
+    Node<T> *temp = head;
+    T max_val = INT32_MIN;
+    while (temp)
+    {
+        if(temp->data > max_val)
+            max_val = temp->data;
+        temp = temp->next_node;    
+    }
+    return max_val;
+}
+
+template <class T>
+T linked_list<T>::Min()
+{
+    Node<T> *temp = head;
+    T min_val = INT32_MAX;
+    while (temp)
+    {
+        if(temp->data < min_val)
+            min_val = temp->data;
+        temp = temp->next_node;    
+    }
+    return min_val;
+}
+
+template <class T>
+T linked_list<T>::Sum()
+{
+    Node<T> *temp = head;
+    T sum = 0;
+    while (temp)
+    {
+        sum += temp->data;
+        temp = temp->next_node;    
+    }
+    return sum;
+}
+
+template <class T>
+T linked_list<T>::at(int pos)
+{
+    Node<T> *temp = head;
+    int current_pos =1;
+    if(pos > size)
+    {
+        cout << "linked list only have " << size << "elements inside it" << endl;
+        return size;
+    }
+    else
+    {
+        while(current_pos != pos)
+        {
+            current_pos++;
+            temp = temp->next_node;
+        }
+        return temp->data;
+    }
+}
 int main()
 {
     linked_list<int> llist;
@@ -189,18 +258,22 @@ int main()
     llist.display_tail();
     llist.display_all();
     llist.getsize();
+
+    cout<<"Display insertion of new node at some middle position in linked list:"<<endl;
     llist.insert(5,5);
     llist.display_head();
     llist.display_tail();
     llist.display_all();
     llist.getsize();
+
+    cout<<"Display insertion of new node at tail position in linked list:"<<endl;
     llist.insert(9,9);
     llist.display_head();;
     llist.display_tail();
     llist.display_all();
     llist.getsize();
 
-    cout<<"Display insertion of new node at head position linked list:"<<endl;
+    cout<<"Display insertion of new node at head position in linked list:"<<endl;
     llist.insert(1,0);
     llist.display_head();
     llist.display_tail();
@@ -209,6 +282,28 @@ int main()
     
     cout<<"Display Reverse of the linked list:"<<endl;
     llist.reverse();
+    llist.display_head();
+    llist.display_tail();
+    llist.display_all();
+
+    cout << "Maximim value in the linked list is : " << llist.Max() << endl;
+    cout << "Minimum value in the linked list is : " << llist.Min() << endl;
+    cout << "Sum of all the elements in linked list is : " << llist.Sum() << endl;
+
+    int size = llist.getsize();
+    for(int i=1; i <= size; i++)
+    {
+        cout << "The "<< i << " element inside this linked list is : " << llist.at(i) << endl;
+    }
+
+    cout<<"Display Reverse of the linked list:"<<endl;
+    llist.reverse();
+    llist.display_head();
+    llist.display_tail();
+    llist.display_all();
+
+    cout<<"Display insertion of new node at tail position in linked list:"<<endl;
+    llist.insert(11,10);
     llist.display_head();
     llist.display_tail();
     llist.display_all();
