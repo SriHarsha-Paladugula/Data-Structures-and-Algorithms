@@ -36,6 +36,7 @@ class linked_list
         T Min();
         T Sum();
         T at(int pos);
+        void insertInSortedLinkedList(T value);
 
         ~linked_list(){};
 
@@ -158,25 +159,30 @@ void linked_list<T>::reverse()
 template <class T>
 void linked_list<T>::deleteNode(int pos)
 {
-    Node<T> *temp = head;
+    Node<T> *current = head;
+    int current_pos =1;
 
     if(pos ==1)
     {
         head = head->next_node;
-        free(temp);
+        free(current);
     }
     else
     {
-        for(int i=2; i<=size; i++)
+        Node<T> *prev;
+        while(current_pos < pos)
         {
-            if(pos == i)
-            {
-                temp->next_node = temp->next_node->next_node;
-                free(temp->next_node);
-            }
-            
-            temp = temp->next_node;
+            prev = current;
+            current =  current->next_node;
+            current_pos++;
         }
+
+        prev->next_node = current->next_node;
+        current->next_node = nullptr;
+        size = size -1;
+        if (prev->next_node == nullptr)
+            tail = prev;
+        free(current);
     }
     
 }
@@ -241,6 +247,45 @@ T linked_list<T>::at(int pos)
         }
         return temp->data;
     }
+}
+
+template <class T>
+void linked_list<T>::insertInSortedLinkedList(T value)
+{
+    Node<T> *current = head;
+    Node<T> *prev = nullptr;
+
+    Node<T> *temp = new Node<T>;
+    temp->data = value;
+    temp->next_node = nullptr;
+
+    if (head == NULL)
+    {
+        head = temp;
+        tail = temp;
+    }
+    else
+    {
+        if(head->data > value)
+        {
+            temp->next_node = head;
+            head = temp;
+        }
+        else
+        {
+            while(current && current->data < value)
+            {
+                prev = current;
+                current = current->next_node;
+            }
+
+            temp->next_node = prev->next_node;
+            prev->next_node = temp;
+        }
+    }
+    size += 1;
+    if(temp->next_node == nullptr)
+        tail = temp;
 }
 int main()
 {
@@ -307,4 +352,47 @@ int main()
     llist.display_head();
     llist.display_tail();
     llist.display_all();
+
+    cout<<"Display deletion of First node  in linked list:"<<endl;
+    llist.deleteNode(1);
+    llist.display_head();
+    llist.display_tail();
+    llist.display_all();
+
+    cout<<"Display deletion of middle node  in linked list:"<<endl;
+    llist.deleteNode(5);
+    llist.display_head();
+    llist.display_tail();
+    llist.display_all();
+
+    cout<<"Display deletion of end node  in linked list:"<<endl;
+    llist.deleteNode(9);
+    llist.display_head();
+    llist.display_tail();
+    llist.display_all();
+
+    cout<<"Display insertion of a node if sorted linked list is empty:"<<endl;
+    linked_list<int> llist2;
+    llist2.insertInSortedLinkedList(1);
+    llist2.display_head();
+    llist2.display_tail();
+    llist2.display_all();
+
+    cout<<"Display insertion of a node at the start of  in sorted linked list:"<<endl;
+    llist2.insertInSortedLinkedList(0);
+    llist2.display_head();
+    llist2.display_tail();
+    llist2.display_all();
+
+    cout<<"Display insertion of a node at the middle of  in sorted linked list:"<<endl;
+    llist2.insertInSortedLinkedList(5);
+    llist2.display_head();
+    llist2.display_tail();
+    llist2.display_all();
+
+    cout<<"Display insertion of a node at the end of  in sorted linked list:"<<endl;
+    llist2.insertInSortedLinkedList(10);
+    llist2.display_head();
+    llist2.display_tail();
+    llist2.display_all();
 }
