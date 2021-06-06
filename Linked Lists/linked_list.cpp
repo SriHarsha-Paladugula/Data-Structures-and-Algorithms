@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 using namespace std;
 
 template<typename T>
@@ -37,6 +38,8 @@ class linked_list
         T Sum();
         T at(int pos);
         void insertInSortedLinkedList(T value);
+        bool isSorted();
+        void deleteDuplicateInSortedLinkedList();
 
         ~linked_list(){};
 
@@ -162,10 +165,13 @@ void linked_list<T>::deleteNode(int pos)
     Node<T> *current = head;
     int current_pos =1;
 
+    if (pos < 1 || pos > size) 
+        return;
+
     if(pos ==1)
     {
         head = head->next_node;
-        free(current);
+        delete current;
     }
     else
     {
@@ -182,7 +188,7 @@ void linked_list<T>::deleteNode(int pos)
         size = size -1;
         if (prev->next_node == nullptr)
             tail = prev;
-        free(current);
+        delete current;
     }
     
 }
@@ -191,7 +197,7 @@ template <class T>
 T linked_list<T>::Max()
 {
     Node<T> *temp = head;
-    T max_val = INT32_MIN;
+    T max_val = std::numeric_limits<T>::min();
     while (temp)
     {
         if(temp->data > max_val)
@@ -205,7 +211,7 @@ template <class T>
 T linked_list<T>::Min()
 {
     Node<T> *temp = head;
-    T min_val = INT32_MAX;
+    T min_val = std::numeric_limits<T>::max();
     while (temp)
     {
         if(temp->data < min_val)
@@ -269,6 +275,7 @@ void linked_list<T>::insertInSortedLinkedList(T value)
         if(head->data > value)
         {
             temp->next_node = head;
+            tail = head;
             head = temp;
         }
         else
@@ -286,6 +293,37 @@ void linked_list<T>::insertInSortedLinkedList(T value)
     size += 1;
     if(temp->next_node == nullptr)
         tail = temp;
+}
+
+template <class T>
+bool linked_list<T>::isSorted()
+{
+    Node<T> *temp = head;
+    while(temp->next_node)
+    {
+        if(temp->data > temp->next_node->data)
+            return false;
+        temp = temp->next_node;    
+    }
+    return true;
+}
+
+template <class T>
+void linked_list<T>::deleteDuplicateInSortedLinkedList()
+{
+    Node<T> *temp = head;
+    int pos =1;
+    while(temp->next_node)
+    {
+        if(temp->data == temp->next_node->data)
+        {
+            deleteNode(pos+1);
+            pos--;
+        }
+        else
+            temp = temp->next_node;
+        pos++;    
+    }
 }
 int main()
 {
@@ -379,7 +417,7 @@ int main()
     llist2.display_all();
 
     cout<<"Display insertion of a node at the start of  in sorted linked list:"<<endl;
-    llist2.insertInSortedLinkedList(0);
+    llist2.insertInSortedLinkedList(2);
     llist2.display_head();
     llist2.display_tail();
     llist2.display_all();
@@ -395,4 +433,41 @@ int main()
     llist2.display_head();
     llist2.display_tail();
     llist2.display_all();
+
+    //llist2.add(0);
+    llist2.insertInSortedLinkedList(0);
+    llist2.display_head();
+    llist2.display_tail();
+    llist2.display_all();
+
+    cout<<"check is this a sorted linked list:"<<endl;
+    if(llist2.isSorted())
+       cout << "This linked list is sorted" << endl;
+    else
+       cout << "This linked list is not sorted" << endl;
+    cout << "Display deletion of duplicate nodes in sorted linked list" << endl;
+    linked_list<int> llist3;
+    llist3.add(0);
+    llist3.add(1);
+    llist3.add(1);
+    llist3.add(2);
+    llist3.add(2);
+    llist3.add(2);
+    llist3.add(3);
+    llist3.add(4);
+    llist3.add(4);
+    llist3.add(4);
+    llist3.add(4);
+    llist3.add(5);
+    llist3.display_head();
+    llist3.display_tail();
+    llist3.display_all();
+    llist3.deleteDuplicateInSortedLinkedList();
+    cout << "After deletion of duplicate nodes in sorted linked list" << endl;
+    llist3.display_head();
+    llist3.display_tail();
+    llist3.display_all();
+
+
+
 }
