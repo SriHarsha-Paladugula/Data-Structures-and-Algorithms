@@ -40,6 +40,7 @@ class linked_list
         void insertInSortedLinkedList(T value);
         bool isSorted();
         void deleteDuplicateInSortedLinkedList();
+        void concatenate(linked_list llist);
 
         ~linked_list(){};
 
@@ -325,6 +326,13 @@ void linked_list<T>::deleteDuplicateInSortedLinkedList()
         pos++;    
     }
 }
+
+template<class T>
+void linked_list<T>::concatenate(linked_list llist)
+{
+    tail->next_node = llist.head;
+}
+
 int main()
 {
     linked_list<int> llist;
@@ -463,11 +471,15 @@ int main()
     llist3.display_tail();
     llist3.display_all();
     llist3.deleteDuplicateInSortedLinkedList();
+
     cout << "After deletion of duplicate nodes in sorted linked list" << endl;
     llist3.display_head();
     llist3.display_tail();
     llist3.display_all();
 
-
-
+    cout << "concatenate two linked linked lists" << endl;
+    llist.concatenate(llist3);
+    llist.display_head();
+    llist.display_tail();
+    llist.display_all();
 }
