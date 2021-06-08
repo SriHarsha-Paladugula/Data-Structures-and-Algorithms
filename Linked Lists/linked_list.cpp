@@ -41,6 +41,7 @@ class linked_list
         bool isSorted();
         void deleteDuplicateInSortedLinkedList();
         void concatenate(linked_list llist);
+        void merge(linked_list llist);
 
         ~linked_list(){};
 
@@ -333,6 +334,54 @@ void linked_list<T>::concatenate(linked_list llist)
     tail->next_node = llist.head;
 }
 
+template<class T>
+void linked_list<T>::merge(linked_list llist)
+{
+    Node<T>* third = nullptr;
+    Node<T>* last = nullptr;
+    Node<T>* second = llist.head;
+    Node<T>* first = head;
+
+    if(first->data <= second->data)
+    {
+        third = last = first;
+        first = first->next_node;
+        last->next_node = NULL;
+        
+    }
+    else
+    {
+        third = last = second;
+        second = second->next_node;
+        last->next_node = NULL;
+    }
+
+    while (first  && second )
+    {
+        if(first->data <= second->data)
+        {
+            last->next_node = first;
+            last = first;
+            first = first->next_node;
+            last->next_node = NULL;
+        }
+        else
+        {
+            last->next_node = second;
+            last = second;
+            second = second->next_node;
+            last->next_node = NULL;
+        }
+    }
+
+    if(first)
+        last->next_node = first;
+    else
+        last->next_node = second;    
+    
+
+}
+
 int main()
 {
     linked_list<int> llist;
@@ -477,8 +526,14 @@ int main()
     llist3.display_tail();
     llist3.display_all();
 
-    cout << "concatenate two linked linked lists" << endl;
+    /*cout << "concatenate two linked linked lists" << endl;
     llist.concatenate(llist3);
+    llist.display_head();
+    llist.display_tail();
+    llist.display_all();*/
+
+    cout << "merge two linked linked lists" << endl;
+    llist.merge(llist3);
     llist.display_head();
     llist.display_tail();
     llist.display_all();
