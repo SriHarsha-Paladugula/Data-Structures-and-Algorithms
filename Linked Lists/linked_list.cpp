@@ -42,7 +42,8 @@ class linked_list
         void deleteDuplicateInSortedLinkedList();
         void concatenate(linked_list llist);
         void merge(linked_list llist);
-
+        bool isLoop();
+        Node<T>* gethead() {return head;};
         ~linked_list(){};
 
 };
@@ -378,8 +379,24 @@ void linked_list<T>::merge(linked_list llist)
         last->next_node = first;
     else
         last->next_node = second;    
-    
+}
 
+template <class T>
+bool linked_list<T>::isLoop()
+{
+    Node<T>* first = head;
+    Node<T>* second = head; 
+
+    do
+    {
+        first = first->next_node;
+        second = second->next_node;
+        second = second ? second->next_node:second;        
+    }while (first && second && first != second);
+    if (first == second)
+        return true;
+    else
+        return false;
 }
 
 int main()
@@ -526,15 +543,31 @@ int main()
     llist3.display_tail();
     llist3.display_all();
 
-    /*cout << "concatenate two linked linked lists" << endl;
+    /*cout << "concatenate two linked lists" << endl;
     llist.concatenate(llist3);
     llist.display_head();
     llist.display_tail();
     llist.display_all();*/
 
-    cout << "merge two linked linked lists" << endl;
+    cout << "merge two linked lists" << endl;
     llist.merge(llist3);
     llist.display_head();
     llist.display_tail();
     llist.display_all();
+
+    cout << "find if there is a loop in  linked lists" << endl;
+    Node<int>* temp = llist3.gethead();
+    Node<int>* temp2 = llist3.gethead();
+    temp = temp->next_node->next_node;
+    temp2 = temp->next_node->next_node->next_node;
+    temp2->next_node = temp;
+    if(llist3.isLoop())
+        cout << "Linked List llist3 has a loop inside" << endl;
+    else
+        cout << "Linked List llist3 is linear" << endl;
+
+     if(llist2.isLoop())
+        cout << "Linked List llist2 has a loop inside" << endl;
+    else
+        cout << "Linked List llist2 is linear" << endl;        
 }
