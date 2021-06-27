@@ -1,4 +1,5 @@
 #include <iostream>
+#include<cstring>
 using namespace std;
 
 
@@ -10,6 +11,7 @@ class Stack
     int size;
 
     public:
+    Stack();
     Stack(int size);
     ~Stack() ;
     void push(T value);
@@ -22,11 +24,19 @@ class Stack
 };
 
 template<class T>
+Stack<T>::Stack()
+{
+    size = 0;
+    array = nullptr;
+    top = -1;
+}
+
+template<class T>
 Stack<T>::Stack(int size) 
 {
     this->size = size;
     array = new T[size];
-    top--;
+    top=-1;
 }
 
 template<class T>
@@ -113,10 +123,44 @@ T Stack<T>::StackTop()
     return array[top]; 
 }
 
+bool isBalanced(char *exp)
+{
+    Stack<char> stk(strlen(exp));
+    char out;
+    cout << "length of the string is : " << strlen(exp) << endl;
+    for(int i=0; exp[i]!='\0'; i++)
+    {
+        if(exp[i] == '(' || exp[i] == '{' || exp[i] == '[')
+        {
+            stk.push(exp[i]); 
+        } 
+        else if(exp[i] == ')' || exp[i] == '}' || exp[i] == ']')
+        {
+            if(!stk.isEmpty())
+            {
+                out =stk.pop();
+                if(out == '(' && exp[i] != ')')
+                    return false;
+                if(out == '{' && exp[i] != '}')
+                    return false;
+                if(out == '[' && exp[i] != ']')
+                    return false;
+            }
+            else
+                return false;        
+        }    
+    }
+    if(stk.isEmpty())
+        return true;
+    else
+        return false;    
+}
+
+
 int main() 
 {
  
-    int A[] = {1, 3, 5, 7, 9};
+    /*int A[] = {1, 3, 5, 7, 9};
     int size = sizeof(A)/sizeof(A[0]);
     cout<< "size of array is : " << size << endl;
     Stack<int> stk(size);
@@ -151,7 +195,16 @@ int main()
     cout << endl;
     stk.pop();
  
-    cout << "Stack empty: " << stk.isEmpty() << endl;
+    cout << "Stack empty: " << stk.isEmpty() << endl;*/
+
+    char A[] = "{([a+b]*[c-d])/e}";
+    cout << isBalanced(A) << endl;
+ 
+    char B[] = "{([a+b]}*[c-d])/e}";
+    cout << isBalanced(B) << endl;
+ 
+    char C[] = "{([{a+b]*[c-d])/e}";
+    cout << isBalanced(C) << endl;
  
     return 0;
 }
