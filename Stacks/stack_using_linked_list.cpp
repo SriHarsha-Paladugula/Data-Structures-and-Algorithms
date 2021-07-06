@@ -128,9 +128,55 @@ void stack_using_linked_list<T>::displayStack()
     }
 }
 
-int main() {
+int isOperand(char x){
+    if (x == '+' || x == '-' || x == '*' || x == '/')
+        return 0;
+    return 1;
+}
  
-    int A[] = {1, 3, 5, 7, 9};
+int operation(char op, int x, int y)
+{
+    if (op == '+')
+        return x + y;
+    else if (op == '-')
+        return x - y;
+    else if (op == '*')
+        return x * y;
+    else if (op == '/')
+        return x / y;
+
+    return -1;    
+}
+ 
+int postfixEvaluate(char* postfix)
+{
+    stack_using_linked_list<int> stk;
+    int x;
+    int y;
+    int result;
+    for (int i=0; postfix[i]!='\0'; i++)
+    {
+        if (isOperand(postfix[i]))
+        {
+            // int typecast would not work because of char so subtract '0'
+            stk.push(postfix[i]-'0');
+        } 
+        else 
+        {
+            y = stk.pop();
+            x = stk.pop();
+            result = operation(postfix[i], x, y);
+            stk.push(result);
+        }
+    }
+    result = stk.pop();
+    return result;
+}
+
+int main()
+{
+ 
+    /*int A[] = {1, 3, 5, 7, 9};
  
     stack_using_linked_list<int> stk;
  
@@ -153,7 +199,10 @@ int main() {
     cout << endl;
  
     // Underflow
-    cout << stk.pop() << endl;
+    cout << stk.pop() << endl;*/
+    char postfix[] = "35*62/+4-";
+    cout << postfixEvaluate(postfix) << endl;
+ 
  
     return 0;
 }

@@ -1,5 +1,6 @@
 #include <iostream>
 #include<cstring>
+#include <string>
 using namespace std;
 
 
@@ -21,6 +22,8 @@ class Stack
     bool isFull();
     T StackTop();
     void displayStack();
+    int getSize();
+    int getTop();
 };
 
 template<class T>
@@ -123,6 +126,18 @@ T Stack<T>::StackTop()
     return array[top]; 
 }
 
+template<class T>
+int Stack<T>::getSize()
+{
+    return size; 
+}
+
+template<class T>
+int Stack<T>::getTop()
+{
+    return top; 
+}
+
 bool isBalanced(char *exp)
 {
     Stack<char> stk(strlen(exp));
@@ -156,6 +171,87 @@ bool isBalanced(char *exp)
         return false;    
 }
 
+int isOperand(char x){
+    if (x == '+' || x == '-' || x == '*' || x == '/' ||
+        x == '^' || x == '(' || x == ')'){
+        return 0;
+    }
+    return 1;
+}
+ 
+int outPrecedence(char x){
+    if (x == '+' || x == '-'){
+        return 1;
+    } else if (x == '*' || x == '/'){
+        return 3;
+    } else if (x == '^'){
+        return 6;
+    } else if (x == '('){
+        return 7;
+    } else if (x == ')'){
+        return 0;
+    }
+    return -1;
+}
+ 
+int inPrecedence(char x){
+    if (x == '+' || x == '-'){
+        return 2;
+    } else if (x == '*' || x == '/'){
+        return 4;
+    } else if (x == '^'){
+        return 5;
+    } else if (x == '('){
+        return 0;
+    }
+    return -1;
+}
+
+char* infix_to_postfix(char *infix)
+{
+    cout << "length of the string is : " << strlen(infix) << endl;
+     char* postfix = new char [strlen(infix) + 1];
+ 
+    Stack<char> stk(strlen(infix));
+    cout << "stack size is : " << stk.getSize() << endl;
+    cout << "stack top pos is at : " << stk.getTop() << endl;
+    int i = 0;
+    int j = 0;
+ 
+    while (infix[i] != '\0')
+    {
+        if (isOperand(infix[i]))
+        {
+            postfix[j++] = infix[i++];
+        } 
+        else 
+        {
+            if (stk.isEmpty() || outPrecedence(infix[i]) > inPrecedence(stk.StackTop()))
+                stk.push(infix[i++]);
+            else if (outPrecedence(infix[i]) == inPrecedence(stk.StackTop()))
+                stk.pop();
+            else
+            {
+                postfix[j++] = stk.StackTop();
+                stk.pop();
+            }
+        }
+        
+        /*cout << " i is : " << i << endl;
+        stk.displayStack();
+        cout << " postfix is : " << postfix << endl;*/
+    }
+ 
+    while (! stk.isEmpty() && stk.StackTop() != ')')
+    {
+        postfix[j++] = stk.StackTop();
+        stk.pop();
+    }
+ 
+    postfix[j] = '\0';
+ 
+    return postfix;
+};
 
 int main() 
 {
@@ -195,16 +291,19 @@ int main()
     cout << endl;
     stk.pop();
  
-    cout << "Stack empty: " << stk.isEmpty() << endl;*/
+    cout << "Stack empty: " << stk.isEmpty() << endl;
 
-    char A[] = "{([a+b]*[c-d])/e}";
-    cout << isBalanced(A) << endl;
- 
-    char B[] = "{([a+b]}*[c-d])/e}";
+    char B[] = "{([a+b]*[c-d])/e}";
     cout << isBalanced(B) << endl;
  
-    char C[] = "{([{a+b]*[c-d])/e}";
+    char C[] = "{([a+b]}*[c-d])/e}";
     cout << isBalanced(C) << endl;
+ 
+    char D[] = "{([{a+b]*[c-d])/e}";
+    cout << isBalanced(D) << endl;*/
+
+    char infix[] = "((a+b)*c)-d^e^f";
+    cout << infix_to_postfix(infix) << endl;
  
     return 0;
 }
