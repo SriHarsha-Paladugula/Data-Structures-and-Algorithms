@@ -31,6 +31,9 @@ class AVL
         void Inorder(Node<T>* p);
         void Inorder(){ Inorder(root); }
         Node<T>* getRoot(){ return root; }
+
+        // Delete
+        Node<T>* Delete(Node<T>* p, int key);
 };
 
 template <typename T>
@@ -182,6 +185,80 @@ void AVL<T>::Inorder(Node<T>* p)
         cout << p->data << ", " << flush;
         Inorder(p->right_node);
     }
+}
+
+template<typename T>
+Node<T>* InPre(Node<T>* p)
+{
+    while(p != nullptr && p->right_node != nullptr)
+        p = p->right_node;
+    return p;    
+}
+
+template<typename T>
+Node<T>* InSucc(Node<T>* p)
+{
+    while(p != nullptr && p->left_node != nullptr)
+        p = p->left_node;
+    return p;    
+}
+
+template <typename T>
+Node<T>* AVL<T>::Delete(Node<T>* p, int key)
+{
+    if(p==nullptr)
+        return p;
+
+    if(p->left_node == nullptr && p->right_node == nullptr)
+    {
+        if(p == root)
+            root = nullptr;
+        delete p;
+        return nullptr;    
+    }
+
+    if(key > p->data)
+        p->right_node = Delete(p->right_node, key);
+
+    else if (key < p->data)
+        p->left_node = Delete(p->left_node, key);
+
+    else
+    {
+        Node<T>* q;
+        if(NodeHeight(p->left_node) > NodeHeight(p->right_node))
+        {
+            q = InPre(p->lchild);
+            p->data = q->data;
+            p->lchild = Delete(p->lchild, q->data);
+        }
+        else 
+        {
+            q = InSucc(p->rchild);
+            p->data = q->data;
+            p->rchild = Delete(p->rchild, q->data);
+        }
+    }
+
+    // Update height
+    p->height = NodeHeight(p);
+ 
+    // Balance Factor and Rotation
+    if (BalanceFactor(p) == 2 && BalanceFactor(p->lchild) == 1) {  // L1 Rotation
+        return LLRotation(p);
+    } else if (BalanceFactor(p) == 2 && BalanceFactor(p->lchild) == -1){  // L-1 Rotation
+        return LRRotation(p);
+    } else if (BalanceFactor(p) == -2 && BalanceFactor(p->rchild) == -1){  // R-1 Rotation
+        return RRRotation(p);
+    } else if (BalanceFactor(p) == -2 && BalanceFactor(p->rchild) == 1){  // R1 Rotation
+        return RLRotation(p);
+    } else if (BalanceFactor(p) == 2 && BalanceFactor(p->lchild) == 0){  // L0 Rotation
+        return LLRotation(p);
+    } else if (BalanceFactor(p) == -2 && BalanceFactor(p->rchild) == 0){  // R0 Rotation
+        return RRRotation(p);
+    }
+ 
+    return p;            
 }
 
 int main()
